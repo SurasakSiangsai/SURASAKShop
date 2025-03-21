@@ -55,6 +55,7 @@ export const createProduct = async (req, res) => {
 			price,
 			image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
 			category,
+			createdBy: req.user._id, // Ensure the product is linked to the seller
 		});
 
 		res.status(201).json(product);
@@ -76,10 +77,18 @@ export const deleteProduct = async (req, res) => {
 			const publicId = product.image.split("/").pop().split(".")[0];
 			try {
 				await cloudinary.uploader.destroy(`products/${publicId}`);
-				console.log("deleted image from cloduinary");
+				console.log("deleted image from cloudinary");
 			} catch (error) {
-				console.log("error deleting image from cloduinary", error);
+				console.log("error deleting image from cloudinary", error);
 			}
+		}
+
+		 // Allow admin or the seller who created the product to delete it
+		if (
+			!product.createdBy ||
+			(product.createdBy.toString() !== req.user._id.toString() && req.user.role !== "admin")
+		) {
+			return res.status(403).json({ message: "Access denied. You can only delete your own products." });
 		}
 
 		await Product.findByIdAndDelete(req.params.id);

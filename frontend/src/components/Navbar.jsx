@@ -13,7 +13,7 @@ const Navbar = () => {
 			<div className='container mx-auto px-4 py-3'>
 				<div className='flex flex-wrap justify-between items-center'>
 					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
-						E-Commerce
+						SURASAKshopping
 					</Link>
 
 					<nav className='flex flex-wrap items-center gap-4'>
@@ -51,6 +51,12 @@ const Navbar = () => {
 								<Lock className='inline-block mr-1' size={18} />
 								<span className='hidden sm:inline'>Dashboard</span>
 							</Link>
+						)}
+						{user?.role === "seller" && (
+  							<Link className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium 
+							transition duration-300 ease-in-out flex items-center" to={"/seller-dashboard"}>
+    						Seller Dashboard
+  							</Link>
 						)}
 
 						{user ? (

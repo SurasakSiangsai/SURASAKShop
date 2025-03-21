@@ -6,6 +6,7 @@ export const protectRoute = async (req, res, next) => {
 		const accessToken = req.cookies.accessToken;
 
 		if (!accessToken) {
+			console.log("No access token provided");
 			return res.status(401).json({ message: "Unauthorized - No access token provided" });
 		}
 
@@ -14,14 +15,16 @@ export const protectRoute = async (req, res, next) => {
 			const user = await User.findById(decoded.userId).select("-password");
 
 			if (!user) {
+				console.log("User not found");
 				return res.status(401).json({ message: "User not found" });
 			}
 
 			req.user = user;
-
+			console.log("Authenticated user:", user);
 			next();
 		} catch (error) {
 			if (error.name === "TokenExpiredError") {
+				console.log("Access token expired");
 				return res.status(401).json({ message: "Unauthorized - Access token expired" });
 			}
 			throw error;
@@ -37,5 +40,13 @@ export const adminRoute = (req, res, next) => {
 		next();
 	} else {
 		return res.status(403).json({ message: "Access denied - Admin only" });
+	}
+};
+
+export const isSellerOrAdmin = (req, res, next) => {
+	if (req.user.role === "seller" || req.user.role === "admin") {
+		next();
+	} else {
+		res.status(403).json({ message: "Access denied. Only sellers or admins can perform this action." });
 	}
 };
