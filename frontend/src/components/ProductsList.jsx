@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Trash, Star } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import { useUserStore } from "../stores/useUserStore"; // Import useUserStore
 
 const ProductsList = () => {
 	const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
+	const { user } = useUserStore(); // Retrieve user from the store
 
 	console.log("products", products);
 
@@ -75,11 +77,15 @@ const ProductsList = () => {
 								<div className='text-sm text-gray-300'>{product.category}</div>
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
+								<div className='text-sm text-gray-300'>{product.seller}</div>
+							</td>
+							<td className='px-6 py-4 whitespace-nowrap'>
 								<button
 									onClick={() => toggleFeaturedProduct(product._id)}
 									className={`p-1 rounded-full ${
 										product.isFeatured ? "bg-yellow-400 text-gray-900" : "bg-gray-600 text-gray-300"
 									} hover:bg-yellow-500 transition-colors duration-200`}
+									disabled={product.createdBy !== user._id && user.role !== "admin"} // Disable for non-owners
 								>
 									<Star className='h-5 w-5' />
 								</button>
@@ -88,6 +94,7 @@ const ProductsList = () => {
 								<button
 									onClick={() => deleteProduct(product._id)}
 									className='text-red-400 hover:text-red-300'
+									disabled={product.createdBy !== user._id && user.role !== "admin"} // Disable for non-owners
 								>
 									<Trash className='h-5 w-5' />
 								</button>

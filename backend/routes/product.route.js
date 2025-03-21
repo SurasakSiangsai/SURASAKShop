@@ -8,16 +8,16 @@ import {
 	getRecommendedProducts,
 	toggleFeaturedProduct,
 } from "../controllers/product.controller.js";
-import { adminRoute, protectRoute } from "../middleware/auth.middleware.js";
+import { adminRoute, protectRoute, isSellerOrAdmin } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/", protectRoute, adminRoute, getAllProducts); // Ensure proper middleware is applied
+router.get("/", protectRoute, isSellerOrAdmin, getAllProducts); // Allow sellers to fetch their own products
 router.get("/featured", getFeaturedProducts);
 router.get("/category/:category", getProductsByCategory);
 router.get("/recommendations", getRecommendedProducts);
-router.post("/", protectRoute, adminRoute, createProduct);
-router.patch("/:id", protectRoute, adminRoute, toggleFeaturedProduct);
-router.delete("/:id", protectRoute, adminRoute, deleteProduct);
+router.post("/", protectRoute, isSellerOrAdmin, createProduct);
+router.patch("/:id", protectRoute, adminRoute, toggleFeaturedProduct); // Only admins can toggle featured
+router.delete("/:id", protectRoute, isSellerOrAdmin, deleteProduct); // Admins and sellers can delete products
 
 export default router;

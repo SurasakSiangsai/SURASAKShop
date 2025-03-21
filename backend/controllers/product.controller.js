@@ -4,7 +4,12 @@ import Product from "../models/product.model.js";
 
 export const getAllProducts = async (req, res) => {
 	try {
-		const products = await Product.find({}); // find all products
+		let products;
+		if (req.user.role === "admin") {
+			products = await Product.find({}); // Admin can fetch all products
+		} else if (req.user.role === "seller") {
+			products = await Product.find({ createdBy: req.user._id }); // Sellers can fetch only their own products
+		}
 		res.json({ products });
 	} catch (error) {
 		console.log("Error in getAllProducts controller", error.message);
@@ -56,6 +61,7 @@ export const createProduct = async (req, res) => {
 			image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
 			category,
 			createdBy: req.user._id, // Ensure the product is linked to the seller
+			seller: req.user.name, // Include seller's name
 		});
 
 		res.status(201).json(product);
