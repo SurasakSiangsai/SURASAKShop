@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
 
 			<div className='mt-4 px-5 pb-5'>
 				<h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
-				<p className='text-sm text-gray-400'>Sold by: {product.seller}</p>
+				<p className='text-sm text-gray-400'>Sold by: {product.createdBy?.name || "Unknown"}</p> {/* Display seller */}
 				<div className='mt-2 mb-5 flex items-center justify-between'>
 					<p>
 						<span className='text-3xl font-bold text-emerald-400'>${product.price}</span>

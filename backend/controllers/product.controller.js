@@ -6,9 +6,9 @@ export const getAllProducts = async (req, res) => {
 	try {
 		let products;
 		if (req.user.role === "admin") {
-			products = await Product.find({}); // Admin can fetch all products
+			products = await Product.find({}).populate("createdBy", "name"); // Include seller's name
 		} else if (req.user.role === "seller") {
-			products = await Product.find({ createdBy: req.user._id }); // Sellers can fetch only their own products
+			products = await Product.find({ createdBy: req.user._id }).populate("createdBy", "name"); // Include seller's name
 		}
 		res.json({ products });
 	} catch (error) {
@@ -133,7 +133,7 @@ export const getRecommendedProducts = async (req, res) => {
 export const getProductsByCategory = async (req, res) => {
 	const { category } = req.params;
 	try {
-		const products = await Product.find({ category });
+		const products = await Product.find({ category }).populate("createdBy", "name"); // Include seller's name
 		res.json({ products });
 	} catch (error) {
 		console.log("Error in getProductsByCategory controller", error.message);

@@ -77,7 +77,7 @@ const ProductsList = () => {
 								<div className='text-sm text-gray-300'>{product.category}</div>
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
-								<div className='text-sm text-gray-300'>{product.seller}</div>
+								<div className='text-sm text-gray-300'>{product.createdBy?.name || "Unknown"}</div> {/* Display seller */}
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<button
