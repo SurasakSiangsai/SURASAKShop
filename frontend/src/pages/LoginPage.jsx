@@ -77,6 +77,11 @@ const LoginPage = () => {
 									placeholder='••••••••'
 								/>
 							</div>
+							<div className='mt-2 text-right'>
+								<Link to='/forgot-password' className='text-sm text-emerald-400 hover:text-emerald-300'>
+									Forgot Password?
+								</Link>
+							</div>
 						</div>
 
 						<button

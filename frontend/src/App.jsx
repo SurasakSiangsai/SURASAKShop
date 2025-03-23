@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import SellerPage from "./pages/SellerPage";
 import CategoryPage from "./pages/CategoryPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 import Navbar from "./components/Navbar";
 import { Toaster } from "react-hot-toast";
@@ -61,6 +63,8 @@ function App() {
 						element={user ? <PurchaseSuccessPage /> : <Navigate to='/login' />}
 					/>
 					<Route path='/purchase-cancel' element={user ? <PurchaseCancelPage /> : <Navigate to='/login' />} />
+					<Route path='/forgot-password' element={<ForgotPasswordPage />} />
+					<Route path='/reset-password' element={<ResetPasswordPage />} />
 				</Routes>
 			</div>
 			<Toaster />
